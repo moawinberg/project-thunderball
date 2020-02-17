@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import MapGL from 'react-map-gl';
+import React, { useState, useEffect } from 'react';
+import MapGL, {NavigationControl} from 'react-map-gl';
 import tokens from '../../tokens.json'
 
 const MapView = () => {
+    const mapRef = React.useRef();
     const [viewPort, setViewPort] = useState({
         // just for prototyping purposes, change initial coords later
         latitude: 59.33258,
@@ -10,7 +11,18 @@ const MapView = () => {
         zoom: 5,
         bearing: 0,
         pitch: 0
-    })
+    });
+
+    // update map bounds when viewport changes
+    useEffect(() => {
+        if (mapRef) {
+            // find coordinates of edges of map
+            const  bounds = mapRef.current.getMap().getBounds();
+            // use coordinate edges to filter data
+            
+        }
+    }, [mapRef, viewPort])
+
     return (
         <MapGL
         {...viewPort}
@@ -18,7 +30,12 @@ const MapView = () => {
         height="100vh"
         onViewportChange = {setViewPort}
         mapboxApiAccessToken = {tokens["mapbox"]}
-        />
+        ref={ mapRef}
+        >
+            <div style={{"position": "absolute", "right": "0"}}>
+                <NavigationControl/>
+            </div>
+            </MapGL>
     )
 }
 
