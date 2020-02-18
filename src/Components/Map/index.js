@@ -19,6 +19,7 @@ const MapView = () => {
             // find coordinates of edges of map
             const  bounds = mapRef.current.getMap().getBounds();
             // use coordinate edges to filter data
+            console.log(bounds)
             
         }
     }, [mapRef, viewPort])
