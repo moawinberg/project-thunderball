@@ -22,6 +22,7 @@ const MapView = () => {
         if (mapRef) {
             // find coordinates of edges of map
             const bounds = mapRef.current.getMap().getBounds();
+        
             // use coordinate edges to filter data
             const geo = create_polygons(bounds._ne, bounds._sw, "aaaa")
             //console.log(polys)

@@ -26,7 +26,7 @@ const make_polygons = ( ne, sw, validTime) => {
             //console.log(la)
             const geometry = {
                 "type": "Polygon",
-                "coordinates": [[[la, lon], [la + 1, lon], [la + 1, lon + 1], [la, lon + 1], [la, lon]]]
+                "coordinates": [[[lon, la], [lon + 1, la], [lon + 1, la + 1], [lon, la + 1], [lon, la]]]
             }
 
             const properties = {
