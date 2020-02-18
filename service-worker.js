@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/project-thunderball/precache-manifest.924e2f3737b14799b378c4ec3f2684f1.js"
+  "/project-thunderball/precache-manifest.61fb974d3fdedf95cbd2282e52e1d04c.js"
 );
 
 self.addEventListener('message', (event) => {
