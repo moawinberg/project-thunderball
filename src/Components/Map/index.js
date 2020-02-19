@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import MapGL, { NavigationControl, Source, Layer } from 'react-map-gl';
 import tokens from '../../tokens.json'
 import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
-import data from '../../us-income.geojson'
 import { dataLayer } from './mapstyle'
 
 const MapView = () => {
