@@ -1,8 +1,12 @@
+import "mapbox-gl/dist/mapbox-gl.css"
+import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css"
 import React, { useState, useEffect } from 'react';
-import MapGL, { NavigationControl, Source, Layer } from 'react-map-gl';
+import MapGL, { NavigationControl, Source, Layer, GeolocateControl } from 'react-map-gl';
 import tokens from '../../tokens.json'
 import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
 import { dataLayer } from './mapstyle'
+import 'mapbox-gl/dist/mapbox-gl.css';
+import Geocoder from "react-map-gl-geocoder";
 
 const MapView = ({polygons}) => {
     const mapRef = React.useRef();
@@ -45,6 +49,7 @@ const MapView = ({polygons}) => {
         }
     }, [mapRef, viewPort])
 
+<<<<<<< HEAD
     const dataLayer = {
         id: 'data',
         type: 'fill',
@@ -62,6 +67,18 @@ const MapView = ({polygons}) => {
           }
         
     }
+=======
+
+    const handleGeocoderViewportChange = viewport => {
+    const geocoderDefaultOverrides = { transitionDuration: 1000 };
+
+    return setViewPort({
+      ...viewport,
+      ...geocoderDefaultOverrides
+    });
+    };
+
+>>>>>>> search/geolocation
 
     return (
         <MapGL
@@ -72,14 +89,40 @@ const MapView = ({polygons}) => {
             mapboxApiAccessToken={tokens["mapbox"]}
             ref={mapRef}
         >
+<<<<<<< HEAD
+<<<<<<< HEAD
             {polygons && (<Source type="geojson" data={polygons}>
                 <Layer {...dataLayer} />
             </Source>)}
             <div style={{ "position": "absolute", "right": "0" }}>
                 <NavigationControl />
+=======
+            <div style={{"position": "absolute", "right": "0"}}>
+                <NavigationControl/>
+                <GeolocateControl
+                positionOptions={{enableHighAccuracy: true}}
+                trackUserLocation={true}
+                />
+>>>>>>> Add Search and geoLocate
             </div>
+=======
+        <Geocoder 
+            mapRef={ mapRef}
+            //onResult={this.handleOnResult}
+            onViewportChange={handleGeocoderViewportChange}
+            mapboxApiAccessToken = {tokens["mapbox"]}
+            position='top-left'
+        />
+        <div style={{"position": "absolute", "right": "0"}}>
+            <NavigationControl/>
+            <GeolocateControl
+            positionOptions={{enableHighAccuracy: true}}
+            trackUserLocation={true}
+            />
+        </div>
+>>>>>>> search/geolocation
         </MapGL>
     )
 }
 
-export default MapView
+export default MapView;
