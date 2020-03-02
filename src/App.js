@@ -27,7 +27,7 @@ function App() {
     'start_date': '2019-08-15 00',
     'end_date': '2019-08-16 00',
     'coords': {'latitude': coords.lat, 'longitude': coords.lon, 'height': [59,60]},
-    'variables': ['T']
+    'variables': ['T', 'U', 'V']
     }
 
     const options = {
@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     if (!isLoading && data !== null && error === null) {
-      setPolygons(create_polygons(data['data_vars']['T']['data'],coords.lon, coords.lat, 0, 0, 0))
+      setPolygons(create_polygons(data['data_vars'],coords.lon, coords.lat, 0, 0, 0))
     }
   }, [data, isLoading, error])
 

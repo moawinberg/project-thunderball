@@ -11,8 +11,10 @@ import zarr from 'zarr';
 
 const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
     // get the desired forecast
-    const forecast = data[referenceTime][validTime][height];
-    console.log(forecast)
+    const tempForecast = data['T']['data'][referenceTime][validTime][height];
+    const uForecast = data['U']['data'][referenceTime][validTime][height];
+    const vForecast = data['V']['data'][referenceTime][validTime][height]
+    //console.log(forecast)
 
     // init geojson object
     const geo = {
@@ -30,19 +32,30 @@ const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
                 "type": "Polygon",
                 "coordinates": [[[lon_start, lat_start], [lon_start + 1, lat_start], [lon_start + 1, lat_start + 1], [lon_start, lat_start + 1], [lon_start, lat_start]]]
             }
+            const windGeom = {
+                "type": "Point",
+                coordinates: [lon_start, lat_start]
+            }
+
+            const windProps = {
+                "U" : uForecast[latit][long],
+                "V": vForecast[latit][long]
+            }
+
             let properties = {}
             if (latit < lat.length - 1 && long < lon.length - 1) {
                 properties = {
-                    "airPressure": ((forecast[latit][long] + forecast[latit + 1][long] + forecast[latit + 1][long + 1] + forecast[latit][long + 1]) / 4)
+                    "airPressure": ((tempForecast[latit][long] + tempForecast[latit + 1][long] + tempForecast[latit + 1][long + 1] + tempForecast[latit][long + 1]) / 4)
                 }
             }
             else {
                 properties = {
-                    "airPressure": forecast[latit][long]
+                    "airPressure": tempForecast[latit][long]
                 }
             }
 
             geo.features.push({ "geometry": geometry, "type": "Feature", "properties": properties })
+            geo.features.push({ "geometry": windGeom, "type": "Feature", "properties": windProps })
         }
     }
 
