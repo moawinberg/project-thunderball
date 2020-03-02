@@ -49,10 +49,13 @@ function App() {
   return (
     <div className="App">
 <<<<<<< HEAD
+<<<<<<< HEAD
 
       {polygons ? (<MapView polygons={polygons}/>) : (<h3>Loading map..</h3>)}
 =======
     	<SearchableMap />
+=======
+>>>>>>> search/geolocation
       <MapView />
 >>>>>>> Add Search and geoLocate
     </div>
