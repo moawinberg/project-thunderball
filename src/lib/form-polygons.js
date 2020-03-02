@@ -2,15 +2,17 @@ import zarr from 'zarr';
 
 /**
  * 
- * @param {*} arr zArray of forecast data
+ * @param {*} arr array of forecast data
  * @param {*} nw northwest coords of map area
  * @param {*} se southeast coords of map area
  * @param {*} validTime forecast timestamp
  */
 
 
-const make_polygons = ( ne, sw, validTime) => {
-    //const forecast = arr[validTime, null, null] // get all datapoints for desired forecast
+const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
+    // get the desired forecast
+    const forecast = data[referenceTime][validTime][height];
+    console.log(forecast)
 
     // init geojson object
     const geo = {
@@ -19,23 +21,32 @@ const make_polygons = ( ne, sw, validTime) => {
     }
     // iterate over coords in zArr
     // first loop is latitude
-    for (let la = (sw.lat); la <= ne.lat; la += 1) {
+    for (let long = 0; long < lon.length; long++) {
         //second is longitude
-        for (let lon = sw.lng; lon <= ne.lng; lon +=1) {
-            //console.log(lon)
-            //console.log(la)
+        for (let latit = 0; latit < lat.length; latit++) {
+            const lon_start = lon[0] + long;
+            const lat_start = lat[0] + latit
             const geometry = {
                 "type": "Polygon",
-                "coordinates": [[[lon, la], [lon + 1, la], [lon + 1, la + 1], [lon, la + 1], [lon, la]]]
+                "coordinates": [[[lon_start, lat_start], [lon_start + 1, lat_start], [lon_start + 1, lat_start + 1], [lon_start, lat_start + 1], [lon_start, lat_start]]]
             }
-
-            const properties = {
-                "airPressure":1000 + Math.round(Math.random()*25)
+            let properties = {}
+            if (latit < lat.length - 1 && long < lon.length - 1) {
+                properties = {
+                    "airPressure": ((forecast[latit][long] + forecast[latit + 1][long] + forecast[latit + 1][long + 1] + forecast[latit][long + 1]) / 4)
+                }
+            }
+            else {
+                properties = {
+                    "airPressure": forecast[latit][long]
+                }
             }
 
             geo.features.push({ "geometry": geometry, "type": "Feature", "properties": properties })
         }
     }
+
+    console.log(geo);
     return geo
 }
 
