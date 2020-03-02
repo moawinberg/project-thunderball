@@ -5,8 +5,8 @@ import MapGL, { NavigationControl, Source, Layer, GeolocateControl } from 'react
 import tokens from '../../tokens.json'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Geocoder from "react-map-gl-geocoder";
-// import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
-// import { dataLayer } from './mapstyle'
+import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
+import { dataLayer } from './mapstyle'
 
 const MapView = ({ polygons }) => {
   const mapRef = React.useRef();
@@ -44,7 +44,12 @@ const MapView = ({ polygons }) => {
   // update map bounds when viewport changes
   useEffect(() => {
     if (mapRef) {
+      // // find coordinates of edges of map
+      // const bounds = mapRef.current.getMap().getBounds();
 
+      // // use coordinate edges to filter data
+      // const geo = create_polygons(bounds._ne, bounds._sw, "aaaa")
+      // setPolys(geo);
 
     }
   }, [mapRef, viewPort])
