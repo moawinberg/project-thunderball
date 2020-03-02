@@ -4,7 +4,7 @@ import tokens from '../../tokens.json'
 import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
 import { dataLayer } from './mapstyle'
 
-const MapView = () => {
+const MapView = ({polygons}) => {
     const mapRef = React.useRef();
     const [polys, setPolys] = useState();
     const [viewPort, setViewPort] = useState({
@@ -19,13 +19,7 @@ const MapView = () => {
     // update map bounds when viewport changes
     useEffect(() => {
         if (mapRef) {
-            // find coordinates of edges of map
-            const bounds = mapRef.current.getMap().getBounds();
-        
-            // use coordinate edges to filter data
-            const geo = create_polygons(bounds._ne, bounds._sw, "aaaa")
-            //console.log(polys)
-            setPolys(geo);
+         
 
         }
     }, [mapRef, viewPort])
@@ -34,15 +28,16 @@ const MapView = () => {
         id: 'data',
         type: 'fill',
         paint: {
-            'fill-color': {
-              property: 'airPressure',
-              stops: [
-                [1000, '#3288bd'],
-                [1100, '#66c2a5'],
-                
-              ]
-            },
-            'fill-opacity': 0.5
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'airPressure'],
+                273,
+                '#03f4fc',
+                300,
+                '#fc0703'
+                ],
+            'fill-opacity': 0.5,
           }
     }
 
@@ -55,7 +50,7 @@ const MapView = () => {
             mapboxApiAccessToken={tokens["mapbox"]}
             ref={mapRef}
         >
-            {polys && (<Source type="geojson" data={polys}>
+            {polygons && (<Source type="geojson" data={polygons}>
                 <Layer {...dataLayer} />
             </Source>)}
             <div style={{ "position": "absolute", "right": "0" }}>
