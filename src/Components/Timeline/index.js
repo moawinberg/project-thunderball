@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import useFetch from '../../lib/use-fetch';
 import * as d3 from "d3";
 
@@ -47,10 +47,13 @@ const Timeline = () => {
     { "lane": 2, "id": "Joseon", "start": 1390, "end": 1890 },
     { "lane": 2, "id": "Korean Empire", "start": 1900, "end": 1945 }];
 
-    var timeBegin = 0;
-    var timeEnd = 2000;
-    var maxExtent;
-    var minExtent;
+  var timeBegin = 0;
+  var timeEnd = 2000;
+  var maxExtent;
+  var minExtent;
+  const ref = useRef()
+
+  let svgElement = d3.select(ref.current);
 
   var m = [20, 15, 15, 120], //top right bottom left
     w = 960 - m[1] - m[3],
@@ -71,25 +74,25 @@ const Timeline = () => {
     .domain([0, laneLength])
     .range([0, miniHeight]);
 
-  var chart = d3.select("body")
+  svgElement = d3.select("body")
     .append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
     .attr("class", "chart");
 
-  chart.append("defs").append("clipPath")
+  svgElement.append("defs").append("clipPath")
     .attr("id", "clip")
     .append("rect")
     .attr("width", w)
     .attr("height", mainHeight);
 
-  var main = chart.append("g")
+  var main = svgElement.append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
     .attr("width", w)
     .attr("height", mainHeight)
     .attr("class", "main");
 
-  var mini = chart.append("g")
+  var mini = svgElement.append("g")
     .attr("transform", "translate(" + m[3] + "," + (mainHeight + m[0]) + ")")
     .attr("width", w)
     .attr("height", miniHeight)
@@ -199,6 +202,6 @@ const Timeline = () => {
     labels.exit().remove();
 
   }
-  return <h1>Hello</h1>;
+  return <svg ref={ref}></svg>;
 }
 export default Timeline
