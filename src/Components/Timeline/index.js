@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import useFetch from '../../lib/use-fetch';
+import React, { useRef } from 'react';
 import * as d3 from "d3";
+import styles from './timeline.css'
 
 
 // const getTimelineData = () => {
@@ -202,6 +202,6 @@ const Timeline = () => {
     labels.exit().remove();
 
   }
-  return <svg ref={ref}></svg>;
+  return <svg className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;
 }
 export default Timeline
