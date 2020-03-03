@@ -41,6 +41,16 @@ function App() {
     fetch(endpoint_url + JSON.stringify(params), options)
   }, [])
 
+  // collect data items to timeline
+  const dataItems = [{
+    start: '2019-08-15 10',
+    end: '2019-08-15 12'
+  },
+  {
+    start: '2019-08-15 14',
+    end: '2019-08-15 15'
+  }];
+
   useEffect(() => {
     if (!isLoading && data !== null && error === null) {
       setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, 0, 0, 0))
@@ -50,7 +60,7 @@ function App() {
   return (
     <div className="App">
       <div id="container" className="svg-container"></div>
-      {polygons && (<Timeline />) }
+      {polygons && (<Timeline dataItems={dataItems} />)}
       {polygons ? (<MapView polygons={polygons} />) : (<h3>Loading map..</h3>)}
     </div>
   );

@@ -1,37 +1,34 @@
 import React, { useRef } from 'react';
 import * as d3 from "d3";
 import styles from './timeline.css'
+import _ from 'underscore'
+import moment from 'moment'
 
+const Timeline = (dataItems) => {
+  // var formatTime = d3.timeFormat();
+  // add items to timeline
+  const items = [];
+  let index = 0;
+  _.each(dataItems.dataItems, item => {
+    items.push({
+      lane : 0,
+      id : index,
+      // start : moment.utc(item.start),
+      // end : moment.utc(item.end),
+      start : 2,
+      end : 3,
+    });
+    index += 1;
+  });
 
-// const getTimelineData = () => {
-//     const [fetch, isLoading, data, error] = useFetch();
+  // const latestEndTime = _.max(items, i => moment.utc(i.end)).end;
+  // const timeEnd = latestEndTime;
+  // const timeBegin = moment.utc(timeEnd).subtract(1, "day");
 
-//     //fetch data
-//     useEffect(() => {
-//         fetch(/*insert URL*/)
-//     },[]);
+  // var time1 = formatTime(Date.now());
+  // var time2 = formatTime(Date.now() + 60 * 60 * 1000);
 
-//     //display data when it arrives
-//     useEffect(() => {
-//         if (!isLoading && !(data === null) && (error === null)) {
-//             // do stuff with data here
-//         }
-//     }, [data, isLoading, error]);
-// }
-
-
-const Timeline = () => {
-
-  var formatDay = d3.timeFormat("%a %d");
-  var time1 = formatDay(Date.now());
-  var time2 = formatDay(Date.now() + 60 * 60 * 1000);
-
-  var lanes = ["Weather forecast"],
-    laneLength = lanes.length,
-    items = [
-      { "lane": 0, "id": "Qin", "start": 2, "end": 5 },
-      { "lane": 0, "id": "Wan", "start": 6, "end": 7 }
-    ];
+  var lanes = ["Weather forecast"];
 
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
     width = 960 - margin.left - margin.right,
@@ -53,17 +50,14 @@ const Timeline = () => {
 
   var currentTime = Date.now();
 
-  //xAxis.select()
-
   let svgElement = d3.select(ref.current);
 
   var m = [20, 15, 15, 150], //top right bottom left
     w = 960,
     h = 40,
-    miniHeight = laneLength;
+    miniHeight = 1;
 
   //scales
-
   var x = d3.scaleTime()
     .domain([timeBegin, timeEnd])
     .range([0, w]);
@@ -72,10 +66,10 @@ const Timeline = () => {
     .range([0, w]);
 
   var y1 = d3.scaleLinear()
-    .domain([0, laneLength])
+    .domain([0, 1])
     .range([0, miniHeight]);
   var y2 = d3.scaleLinear()
-    .domain([0, laneLength])
+    .domain([0, 1])
     .range([0, miniHeight]);
 
   svgElement = d3.select("div#container")
@@ -84,8 +78,6 @@ const Timeline = () => {
     .attr("viewBox", "0 0 1200 1200")
     .classed("svg-content", true)
     .attr("class", "chart");
-
-  console.log('add svg');
 
   var mini = svgElement.append("g")
     .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
