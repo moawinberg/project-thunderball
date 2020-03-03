@@ -13,8 +13,8 @@ const REFERENCE_TIME = '2020-02-25 00';
 
 const bounds = { ne: { lon: 37, lat: 70 }, sw: { lon: 2, lat: 52 } }
 
-const coords = { lon: range(bounds.sw.lon, bounds.ne.lon), lat: range(bounds.sw.lat, bounds.ne.lat) }
-console.log(coords)
+const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bounds.sw.lat, bounds.ne.lat,0.5) }
+
 
 function App() {
   const [fetch, isLoading, data, error] = useFetch();
@@ -27,7 +27,7 @@ function App() {
       'start_date': '2019-08-15 00',
       'end_date': '2019-08-16 00',
       'coords': { 'latitude': coords.lat, 'longitude': coords.lon, 'height': [59, 60] },
-      'variables': ['T']
+      'variables': ['T', 'U', 'V']
     }
 
     const options = {
@@ -42,14 +42,13 @@ function App() {
 
   useEffect(() => {
     if (!isLoading && data !== null && error === null) {
-      setPolygons(create_polygons(data['data_vars']['T']['data'], coords.lon, coords.lat, 0, 0, 0))
+      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, 0, 0, 0))
     }
   }, [data, isLoading, error])
 
   return (
     <div className="App">
       {polygons ? (<MapView polygons={polygons} />) : (<h3>Loading map..</h3>)}
-      <MapView />
     </div>
   );
 }
