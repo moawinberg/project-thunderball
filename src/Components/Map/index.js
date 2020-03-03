@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css"
 import React, { useState, useEffect } from 'react';
-import MapGL, { NavigationControl, Source, Layer, GeolocateControl } from 'react-map-gl';
+import MapGL, { NavigationControl, Source, Layer, GeolocateControl, Popup } from 'react-map-gl';
 import tokens from '../../tokens.json'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Geocoder from "react-map-gl-geocoder";
@@ -14,6 +14,7 @@ import { dataLayer } from './mapstyle'
 const MapView = ({ polygons }) => {
   const mapRef = React.useRef();
   const [polys, setPolys] = useState();
+  const [hoverData, setHoverData] = useState();
 
   const boundSW = [13.250475, 54.500440]; //longitude, latitude TWEAK THESE FOR BETTER BOUNDS
   const boundNE = [26.248053, 68.840996];
@@ -111,6 +112,33 @@ const MapView = ({ polygons }) => {
     });
   };
 
+  const onHover = event => {
+      let temp = '';
+      let windSpeed = '';
+      let hoverInfo = null;
+
+      const poly = event.features[0];
+      console.log(poly)
+      if (poly) {
+          hoverInfo = {
+              lngLat: event.lngLat,
+              info: poly.properties
+          }
+      }
+      setHoverData(hoverInfo)
+  }
+
+  const renderPopUp = () => {
+      if(hoverData) {
+        return (
+            <Popup longitude={hoverData.lngLat[0]} latitude={hoverData.lngLat[1]} closeButton={false}>
+              <div className="weather-info">Temperature: {Math.round((hoverData.info.temperature - 273) * 10) / 10} °C</div>
+              <div className="weather-info">Wind speed: {Math.round(hoverData.info.windspeed)} m/s</div>
+            </Popup>
+          );
+      }
+  }
+
   return (
     <MapGL
       {...viewPort}
@@ -118,14 +146,18 @@ const MapView = ({ polygons }) => {
       height="100vh"
       onViewportChange={setBounds}
       mapboxApiAccessToken={tokens["mapbox"]}
+      onHover={onHover}
+      interactiveLayerIds={['data']}
       ref={mapRef}>
       {
         polygons && (
           <Source type="geojson" data={polygons}>
             <Layer {...useLayer } />
           </Source>
+          
         )
       }
+      {renderPopUp()}
       <div style={{ "position": "absolute", "right": "0" }}>
         <NavigationControl />
         <GeolocateControl
