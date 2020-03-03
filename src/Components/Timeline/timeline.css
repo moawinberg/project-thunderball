@@ -2,27 +2,20 @@
   shape-rendering: crispEdges;
 }
 
-.mini text {
-  font: 9px sans-serif;	
-}
-
-.main text {
-  font: 12px sans-serif;	
+.timeline text {
+  font: 12px sans-serif;
+  font-weight: 400;
 }
 
 .miniItem0 {
-  fill: darksalmon;
-  stroke-width: 6;	
+  fill: #18515E;
+  stroke-width: 6;
 }
 
-.miniItem1 {
-  fill: darkolivegreen;
-  fill-opacity: .7;
-  stroke-width: 6;	
+.miniItem0 .disabled {
+  fill: darkgray;
 }
 
-.miniItem2 {
-  fill: slategray;
-  fill-opacity: .7;
-  stroke-width: 6;	
+.miniItem0 .future {
+  opacity: 0.5;
 }

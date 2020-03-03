@@ -28,7 +28,8 @@ const Timeline = () => {
   var lanes = ["Weather forecast"],
     laneLength = lanes.length,
     items = [
-      { "lane": 0, "id": "Qin", "start": 2, "end": 5 }
+      { "lane": 0, "id": "Qin", "start": 2, "end": 5 },
+      { "lane": 0, "id": "Wan", "start": 6, "end": 7 }
     ];
 
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
