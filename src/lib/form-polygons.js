@@ -1,41 +1,52 @@
-import zarr from 'zarr';
+
 
 /**
  * 
- * @param {*} arr zArray of forecast data
+ * @param {*} arr array of forecast data
  * @param {*} nw northwest coords of map area
  * @param {*} se southeast coords of map area
  * @param {*} validTime forecast timestamp
  */
 
 
-const make_polygons = ( ne, sw, validTime) => {
-    //const forecast = arr[validTime, null, null] // get all datapoints for desired forecast
-
+const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
+    // get the desired forecast
+    const tempForecast = data['T']['data'][referenceTime][validTime][height];
+    const uForecast = data['U']['data'][referenceTime][validTime][height];
+    const vForecast = data['V']['data'][referenceTime][validTime][height];
     // init geojson object
     const geo = {
         "type": "FeatureCollection",
         "features": []
     }
-    // iterate over coords in zArr
+    // iterate over coords in data
     // first loop is latitude
-    for (let la = (sw.lat); la <= ne.lat; la += 1) {
+    for (let long = 0; long < lon.length - 1; long++) {
         //second is longitude
-        for (let lon = sw.lng; lon <= ne.lng; lon +=1) {
-            //console.log(lon)
-            //console.log(la)
+        for (let latit = 0; latit < lat.length - 1; latit++) {
+            //console.log(lat_start)
             const geometry = {
                 "type": "Polygon",
-                "coordinates": [[[lon, la], [lon + 1, la], [lon + 1, la + 1], [lon, la + 1], [lon, la]]]
+                "coordinates": [[[lon[long], lat[latit]], [lon[long+ 1], lat[latit]], [lon[long + 1], lat[latit + 1]], [lon[long], lat[latit + 1]], [lon[long], lat[latit]]]]
             }
-
-            const properties = {
-                "airPressure":1000 + Math.round(Math.random()*25)
+            let properties = {}
+            if (latit < lat.length - 1 && long < lon.length - 1) {
+                properties = {
+                    "temperature": ((tempForecast[latit][long] + tempForecast[latit + 1][long] + tempForecast[latit + 1][long + 1] + tempForecast[latit][long + 1]) / 4),
+                    "windspeed": Math.sqrt(Math.pow(uForecast[latit][long], 2), Math.pow(vForecast[latit][long], 2))
+                }
+            }
+            else {
+                properties = {
+                    "airPressure": tempForecast[latit][long]
+                }
             }
 
             geo.features.push({ "geometry": geometry, "type": "Feature", "properties": properties })
         }
     }
+
+    console.log(geo);
     return geo
 }
 
