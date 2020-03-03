@@ -34,9 +34,7 @@ const Timeline = () => {
     ];
 
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
-    width = window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth,
+    width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   var scale = d3.scaleTime()
@@ -83,7 +81,7 @@ const Timeline = () => {
   svgElement = d3.select("div#container")
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 100 100")
+    .attr("viewBox", "0 0 1200 1200")
     .classed("svg-content", true)
     .attr("class", "chart");
 
@@ -185,6 +183,6 @@ const Timeline = () => {
     labels.exit().remove();
 
   }
-  return <svg className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;
+  return <svg className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;;
 }
 export default Timeline
