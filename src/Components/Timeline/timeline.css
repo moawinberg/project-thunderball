@@ -1,9 +1,3 @@
-.chart {
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
 .timeline text {
   font: 12px sans-serif;
   font-weight: 400;
@@ -26,9 +20,8 @@
   display: inline-block;
   position: relative;
   width: 100%;
-  height: 10%;
+  height: 80px;
   vertical-align: top;
-  overflow: hidden;
 }
 .svg-content {
   display: inline-block;
@@ -36,8 +29,3 @@
   top: 0;
   left: 0;
 }
-
-/* svg {
-  background-color: white;
-  height: 20vh;
-} */

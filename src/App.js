@@ -49,7 +49,8 @@ function App() {
 
   return (
     <div className="App">
-      <Timeline />
+      <div id="container" className="svg-container"></div>
+      {polygons && (<Timeline />) }
       {polygons ? (<MapView polygons={polygons} />) : (<h3>Loading map..</h3>)}
     </div>
   );

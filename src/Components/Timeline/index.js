@@ -85,11 +85,7 @@ const Timeline = () => {
     .classed("svg-content", true)
     .attr("class", "chart");
 
-  svgElement.append("defs").append("clipPath")
-    .attr("id", "clip")
-    .append("rect")
-    .attr("width", w)
-    .attr("height", miniHeight);
+  console.log('add svg');
 
   var mini = svgElement.append("g")
     .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
@@ -183,6 +179,6 @@ const Timeline = () => {
     labels.exit().remove();
 
   }
-  return <svg className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;;
+  return null;
 }
 export default Timeline
