@@ -21,40 +21,44 @@ import styles from './timeline.css'
 
 const Timeline = () => {
 
-  var formatDay =  d3.timeFormat("%a %d");
+  var formatDay = d3.timeFormat("%a %d");
   var time1 = formatDay(Date.now());
   var time2 = formatDay(Date.now() + 60 * 60 * 1000);
 
   var lanes = ["Weather forecast"],
     laneLength = lanes.length,
     items = [
-      { "lane": 0, "id": "Qin", "start": time1, "end": time2 }
+      { "lane": 0, "id": "Qin", "start": 2, "end": 5 }
     ];
-  
-  var scale = d3.scaleTime()
-  .domain([Date.now() - 21 * 60 * 60 * 1000, Date.now() + 3 * 60 * 60 * 1000])
-  .range([0, 400]);
 
-  var margin = {top: 250, right: 40, bottom: 250, left: 40},
+  var margin = { top: 250, right: 40, bottom: 250, left: 40 },
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
+
+  var scale = d3.scaleTime()
+    .domain([Date.now() - 21 * 60 * 60 * 1000, Date.now() + 3 * 60 * 60 * 1000])
+    .range([0, width]);
 
   var xAxis = d3.axisBottom()
     .scale(scale)
     .tickFormat(d3.timeFormat("%H:%M"));
 
-  var timeBegin = formatDay(Date.now() - 21 * 60 * 60 * 1000);
-  var timeEnd = formatDay(Date.now() + 3 * 60 * 60 * 1000);
+  var timeBegin = 0;
+  var timeEnd = 10;
   var maxExtent;
   var minExtent;
   const ref = useRef()
+
+  var currentTime = Date.now();
+
+  //xAxis.select()
 
   let svgElement = d3.select(ref.current);
 
   var m = [20, 15, 15, 150], //top right bottom left
     w = 960,
     h = 40,
-    timelineHeight = laneLength;
+    miniHeight = laneLength;
 
   //scales
 
@@ -64,9 +68,13 @@ const Timeline = () => {
 
   var x1 = d3.scaleLinear()
     .range([0, w]);
+
+  var y1 = d3.scaleLinear()
+    .domain([0, laneLength])
+    .range([0, miniHeight]);
   var y2 = d3.scaleLinear()
     .domain([0, laneLength])
-    .range([0, timelineHeight]);
+    .range([0, miniHeight]);
 
   svgElement = d3.select("body")
     .append("svg")
@@ -78,24 +86,25 @@ const Timeline = () => {
     .attr("id", "clip")
     .append("rect")
     .attr("width", w)
-    .attr("height", timelineHeight);
+    .attr("height", miniHeight);
 
-  var timeline = svgElement.append("g")
+  var mini = svgElement.append("g")
     .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
     .attr("width", w)
-    .attr("height", timelineHeight)
+    .attr("height", miniHeight)
     .attr("class", "timeline");
 
   //mini lanes and texts
-  timeline.append("g").selectAll(".laneLines")
+  mini.append("g").selectAll(".laneLines")
     .data(items)
     .enter().append("line")
-    .attr("x1", m[1])
-    .attr("x2", w)
-    .attr("y2", function (d) { return y2(d.lane); })
-    .attr("stroke", "lightgray");
+    .attr("x1", currentTime)
+    .attr("x2", currentTime)
+    .attr("y1", 0)
+    .attr("y2", miniHeight)
+    .attr("stroke", "black");
 
-  timeline.append("g").selectAll(".laneText")
+  mini.append("g").selectAll(".laneText")
     .data(lanes)
     .enter().append("text")
     .text(function (d) { return d; })
@@ -105,11 +114,11 @@ const Timeline = () => {
     .attr("text-anchor", "end")
     .attr("class", "laneText");
 
-  var itemRects = timeline.append("g")
+  var itemRects = mini.append("g")
     .attr("clip-path", "url(#clip)");
 
   //mini item rects
-  timeline.append("g").selectAll("miniItems")
+  mini.append("g").selectAll("miniItems")
     .data(items)
     .enter().append("rect")
     .attr("class", function (d) { return "miniItem" + d.lane; })
@@ -119,7 +128,7 @@ const Timeline = () => {
     .attr("height", 10);
 
   //mini labels
-  timeline.append("g").selectAll(".miniLabels")
+  mini.append("g").selectAll(".miniLabels")
     .data(items)
     .enter().append("text")
     .text(function (d) { return d.id; })
@@ -127,15 +136,15 @@ const Timeline = () => {
     .attr("y", function (d) { return y2(d.lane + .5); })
     .attr("dy", ".5ex");
 
-    timeline.append("g")
+  mini.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .call(xAxis.ticks(24));
 
-  timeline.append("g")
+  mini.append("g")
     .selectAll("rect")
     .attr("y", 1)
-    .attr("height", timelineHeight - 1);
+    .attr("height", miniHeight - 1);
 
   display();
 
