@@ -19,6 +19,7 @@ import styles from './timeline.css'
 //     }, [data, isLoading, error]);
 // }
 
+
 const Timeline = () => {
 
   var formatDay = d3.timeFormat("%a %d");
@@ -79,10 +80,11 @@ const Timeline = () => {
     .domain([0, laneLength])
     .range([0, miniHeight]);
 
-  svgElement = d3.select("body")
+  svgElement = d3.select("div#container")
     .append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 100 100")
+    .classed("svg-content", true)
     .attr("class", "chart");
 
   svgElement.append("defs").append("clipPath")
@@ -183,6 +185,6 @@ const Timeline = () => {
     labels.exit().remove();
 
   }
-  return <svg width="100%w" className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;
+  return <svg className={[styles.chart, styles.main].join(' ')} ref={ref}></svg>;
 }
 export default Timeline
