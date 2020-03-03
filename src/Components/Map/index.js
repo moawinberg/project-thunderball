@@ -61,7 +61,7 @@ const MapView = ({ polygons }) => {
       'fill-color': [
         'interpolate',
         ['linear'],
-        ['get', 'airPressure'],
+        ['get', 'temperature'],
         273,
         '#03f4fc',
         300,
