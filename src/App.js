@@ -9,7 +9,7 @@ import tokens from './tokens.json'
 // import * as qs from 'querystring'
 
 const BASE_URL = "https://api.greenlytics.io/weather/v1";
-const REFERENCE_TIME = '2020-02-25 00';
+const REFERENCE_TIME = '2020-03-02 00';
 
 const bounds = { ne: { lon: 37, lat: 70 }, sw: { lon: 2, lat: 52 } }
 
@@ -19,13 +19,15 @@ const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bound
 function App() {
   const [fetch, isLoading, data, error] = useFetch();
   const [polygons, setPolygons] = React.useState();
+  const [forecastTimes, setForecastTimes] = React.useState();
 
   useEffect(() => {
     const endpoint_url = "/get_nwp?query_params="
     const params = {
       'model': 'DWD_ICON-EU',
-      'start_date': '2019-08-15 00',
-      'end_date': '2019-08-16 00',
+      'start_date': '2020-03-01 00',
+      'end_date': '2020-03-02 00',
+      'freq': '3H',
       'coords': { 'latitude': coords.lat, 'longitude': coords.lon, 'height': [59, 60] },
       'variables': ['T', 'U', 'V']
     }
@@ -36,13 +38,14 @@ function App() {
       },
     }
 
-    console.log(params)
+    //console.log(params)
     fetch(endpoint_url + JSON.stringify(params), options)
   }, [])
 
   useEffect(() => {
     if (!isLoading && data !== null && error === null) {
       setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, 0, 0, 0))
+      setForecastTimes(data.coords['reference_time'].data)
     }
   }, [data, isLoading, error])
 
