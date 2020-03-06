@@ -116,9 +116,7 @@ const MapView = ({ polygons }) => {
       let temp = '';
       let windSpeed = '';
       let hoverInfo = null;
-
       const poly = event.features[0];
-      console.log(poly)
       if (poly) {
           hoverInfo = {
               lngLat: event.lngLat,
