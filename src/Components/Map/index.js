@@ -66,6 +66,8 @@ const MapView = ({ polygons, DropDown }) => {
         'interpolate',
         ['linear'],
         ['get', 'temperature'],
+          260,
+        '#d300fc',
         273,
         '#03f4fc',
         300,
