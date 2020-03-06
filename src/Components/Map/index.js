@@ -112,18 +112,19 @@ const MapView = ({ polygons, DropDown }) => {
     });
   };
 
-  const onHover = event => {
+  const onHover = (event) => {
     let temp = '';
     let windSpeed = '';
     let hoverInfo = null;
-    const poly = event.features[0];
-    if (poly) {
+    let poly;
+    if (event && event.lngLat && event.features && event.features[0]) {
+      poly = event.features[0];
       hoverInfo = {
         lngLat: event.lngLat,
         info: poly.properties
-      }
+      };
+      setHoverData(hoverInfo);
     }
-    setHoverData(hoverInfo)
   }
 
   const renderPopUp = () => {
