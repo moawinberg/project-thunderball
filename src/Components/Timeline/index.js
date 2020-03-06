@@ -4,23 +4,28 @@ import styles from './timeline.css'
 import _ from 'underscore'
 import moment from 'moment'
 
-const Timeline = (dataItems) => {
+const Timeline = ({dataItems, start, end, refTimes}) => {
   // var formatTime = d3.timeFormat();
   // add items to timeline
   const items = [];
   let index = 0;
-  _.each(dataItems.dataItems, item => {
+  var timeBegin = new Date(Date.parse(start))
+  var timeEnd = new Date(Date.parse(end))
+  var d = new Date(Date.parse(start))
+  while(d < timeEnd){
+    var ds = new Date(d)
+    var df = new Date(d).setHours(d.getHours() + 2)
     items.push({
       lane : 0,
       id : index,
-      // start : moment.utc(item.start),
-      // end : moment.utc(item.end),
-      start : 2,
-      end : 3,
+      start : ds,
+      end : df,
+      refTime: refTimes[index]
     });
     index += 1;
-  });
-
+    d.setHours(d.getHours() + 3)
+  };
+  console.log(items)
   // const latestEndTime = _.max(items, i => moment.utc(i.end)).end;
   // const timeEnd = latestEndTime;
   // const timeBegin = moment.utc(timeEnd).subtract(1, "day");
@@ -28,22 +33,24 @@ const Timeline = (dataItems) => {
   // var time1 = formatTime(Date.now());
   // var time2 = formatTime(Date.now() + 60 * 60 * 1000);
 
-  var lanes = ["Weather forecast"];
+  var lanes = ["Model runs"];
+
+  
 
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   var scale = d3.scaleTime()
-    .domain([Date.now() - 21 * 60 * 60 * 1000, Date.now() + 3 * 60 * 60 * 1000])
+    .domain([timeBegin, timeEnd])
     .range([0, width]);
 
   var xAxis = d3.axisBottom()
     .scale(scale)
     .tickFormat(d3.timeFormat("%H:%M"));
 
-  var timeBegin = 0;
-  var timeEnd = 10;
+  //var timeBegin = 0;
+  //var timeEnd = 10;
   var maxExtent;
   var minExtent;
   const ref = useRef()
@@ -115,17 +122,18 @@ const Timeline = (dataItems) => {
     .attr("class", function (d) { return "miniItem" + d.lane; })
     .attr("x", function (d) { return x(d.start); })
     .attr("y", function (d) { return y2(d.lane + .5) - 5; })
-    .attr("width", function (d) { return x(d.end - d.start); })
-    .attr("height", 10);
+    .attr("width", function (d) { return (x(d.end) - x(d.start)); })
+    .attr("height", 10)
+    .style('fill', d => d.refTime ? "#18515E": "#707070");
 
   //mini labels
-  mini.append("g").selectAll(".miniLabels")
+  /*mini.append("g").selectAll(".miniLabels")
     .data(items)
     .enter().append("text")
     .text(function (d) { return d.id; })
     .attr("x", function (d) { return x(d.start); })
     .attr("y", function (d) { return y2(d.lane + .5); })
-    .attr("dy", ".5ex");
+    .attr("dy", ".5ex");*/
 
   mini.append("g")
     .attr("class", "x axis")
@@ -147,20 +155,21 @@ const Timeline = (dataItems) => {
 
     //update main item rects
     rects = itemRects.selectAll("rect")
-      .data(visItems, function (d) { return d.id; })
-      .attr("x", function (d) { return x1(d.start); })
-      .attr("width", function (d) { return x1(d.end) - x1(d.start); });
+      .data(items, function (d) { return d.id; })
+      .attr('id', d => d.start)
+      .attr("x", function (d) { return x(d.start); })
+      .attr("width", function (d) { return x(d.end) - x(d.start); });
 
     rects.enter().append("rect")
       .attr("class", function (d) { return "miniItem" + d.lane; })
-      .attr("x", function (d) { return x1(d.start); })
-      .attr("width", function (d) { return x1(d.end) - x1(d.start); })
+      .attr("x", function (d) { return x(d.start); })
+      .attr("width", function (d) { return x(d.end) - x(d.start); })
 
     rects.exit().remove();
 
     //update the item labels
     labels = itemRects.selectAll("text")
-      .data(visItems, function (d) { return d.id; })
+      .data(items, function (d) { return d.id; })
       .attr("x", function (d) { return x1(Math.max(d.start, minExtent) + 2); });
 
     labels.enter().append("text")
@@ -173,4 +182,6 @@ const Timeline = (dataItems) => {
   }
   return null;
 }
+
+
 export default Timeline

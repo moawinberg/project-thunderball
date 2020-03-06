@@ -11,8 +11,8 @@ import Timeline from './Components/Timeline'
 // import * as qs from 'querystring'
 
 const BASE_URL = "https://api.greenlytics.io/weather/v1";
-const REFERENCE_TIME = '2020-03-06';
-
+const REFERENCE_TIME = '2020-03-06T00:00:00.000000000';
+const END_TIME = '2020-03-07T00:00:00.000000000';
 const bounds = { ne: { lon: 37, lat: 70 }, sw: { lon: 2, lat: 52 } }
 
 const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bounds.sw.lat, bounds.ne.lat, 0.5) }
@@ -22,6 +22,7 @@ function App() {
   const [fetch, isLoading, data, error] = useFetch();
   const [polygons, setPolygons] = React.useState();
   const [forecastTimes, setForecastTimes] = React.useState();
+  const [referenceTime, setReferenceTime] = React.useState(REFERENCE_TIME);
   const [validTime, setValidTime] = React.useState(0);
   const [validTimes, setValidTimes] = React.useState();
 
@@ -58,19 +59,28 @@ function App() {
 
   useEffect(() => {
     if (!isLoading && data !== null && error === null) {
-      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, validTime, 0, 0))
       setForecastTimes(data.coords['reference_time'].data)
       setValidTimes(data.coords['valid_time'].data)
+      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, validTime, 0, data.coords['reference_time'].data.indexOf(referenceTime)))
+      
     }
   }, [data, isLoading, error])
 
+  //show different valid times
   useEffect(() => {
     if (data) {
       //console.log(data)
       //console.log('should redefine polygons')
-      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, validTime, 0, 0))
+      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, validTime, 0, forecastTimes.indexOf(referenceTime)))
     }
   }, [validTime])
+
+  //redraw polygons based when reference time changes
+  useEffect(() => {
+    if (data) {
+      setPolygons(create_polygons(data['data_vars'], coords.lon, coords.lat, validTime, 0, forecastTimes.indexOf(referenceTime)))
+    }
+  }, [referenceTime])
 
   const createTime = hrs => {
     const d = new Date(Date.parse(REFERENCE_TIME))
@@ -93,7 +103,7 @@ function App() {
       {
         polygons && validTimes ? (
           <div>
-            <Timeline dataItems={dataItems} />
+            <Timeline dataItems={dataItems} start={REFERENCE_TIME} end={END_TIME} refTimes={forecastTimes} updateRefTime={setReferenceTime}/>
             <MapView polygons={polygons} DropDown={createDropdown(validTimes)} />
           </div>
         ) :

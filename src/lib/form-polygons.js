@@ -11,6 +11,8 @@
 
 const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
     // get the desired forecast
+    //referenceTime = referenceTime < 0 ?  0 : referenceTime
+    console.log(`reference: ${referenceTime}, validTime: ${validTime}`)
     const tempForecast = data['T']['data'][referenceTime][validTime][height];
     const uForecast = data['U']['data'][referenceTime][validTime][height];
     const vForecast = data['V']['data'][referenceTime][validTime][height];
