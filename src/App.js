@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
+import './spinner.css';
 import MapView from './Components/Map'
 import useFetch from './lib/use-fetch';
 import create_polygons from './lib/form-polygons'
@@ -14,7 +15,7 @@ const REFERENCE_TIME = '2020-02-25 00';
 
 const bounds = { ne: { lon: 37, lat: 70 }, sw: { lon: 2, lat: 52 } }
 
-const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bounds.sw.lat, bounds.ne.lat,0.5) }
+const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bounds.sw.lat, bounds.ne.lat, 0.5) }
 
 
 function App() {
@@ -60,8 +61,23 @@ function App() {
   return (
     <div className="App">
       <div id="container" className="svg-container"></div>
-      {polygons && (<Timeline dataItems={dataItems} />)}
-      {polygons ? (<MapView polygons={polygons} />) : (<h3>Loading map..</h3>)}
+      {polygons ? (
+        <div>
+          <Timeline dataItems={dataItems} />
+          <MapView polygons={polygons} />
+        </div>
+      ) :
+        (
+          <div className="center-content">
+            <div className="sk-folding-cube">
+              <div className="sk-cube1 sk-cube"></div>
+              <div className="sk-cube2 sk-cube"></div>
+              <div className="sk-cube4 sk-cube"></div>
+              <div className="sk-cube3 sk-cube"></div>
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 }
