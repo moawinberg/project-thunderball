@@ -1,7 +1,7 @@
 
 
 /**
- * 
+ *
  * @param {*} arr array of forecast data
  * @param {*} nw northwest coords of map area
  * @param {*} se southeast coords of map area
@@ -33,15 +33,16 @@ const make_polygons = (data, lon, lat, validTime, height, referenceTime) => {
             if (latit < lat.length - 1 && long < lon.length - 1) {
                 properties = {
                     "temperature": ((tempForecast[latit][long] + tempForecast[latit + 1][long] + tempForecast[latit + 1][long + 1] + tempForecast[latit][long + 1]) / 4),
-                    "windspeed": Math.sqrt(Math.pow(uForecast[latit][long], 2), Math.pow(vForecast[latit][long], 2))
+                    "windspeed": Math.sqrt(Math.pow(uForecast[latit][long], 2) + Math.pow(vForecast[latit][long], 2))
                 }
+
             }
             else {
                 properties = {
-                    "airPressure": tempForecast[latit][long]
+                    "temperature": tempForecast[latit][long],
+                    "windspeed" : Math.sqrt(Math.pow(uForecast[latit][long], 2) + Math.pow(vForecast[latit][long], 2))
                 }
             }
-
             geo.features.push({ "geometry": geometry, "type": "Feature", "properties": properties })
         }
     }

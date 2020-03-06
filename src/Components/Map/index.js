@@ -5,6 +5,9 @@ import MapGL, { NavigationControl, Source, Layer, GeolocateControl, Popup } from
 import tokens from '../../tokens.json'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Geocoder from "react-map-gl-geocoder";
+import windGradient from './windGradient.png'
+import tempGradient from './tempGradient.png'
+
 import create_polygons, { roundToQuarter } from '../../lib/form-polygons'
 import { dataLayer } from './mapstyle'
 
@@ -13,8 +16,8 @@ const MapView = ({ polygons }) => {
   const [polys, setPolys] = useState();
   const [hoverData, setHoverData] = useState();
 
-  const boundSW = [2.250475, 52.500440]; //longitude, latitude TWEAK THESE FOR BETTER BOUNDS
-  const boundNE = [37.848053, 70.740996];
+  const boundSW = [13.250475, 54.500440]; //longitude, latitude TWEAK THESE FOR BETTER BOUNDS
+  const boundNE = [26.248053, 68.840996];
 
   const [viewPort, setViewPort] = useState({
     // just for prototyping purposes, change initial coords later
@@ -55,7 +58,7 @@ const MapView = ({ polygons }) => {
     }
   }, [mapRef, viewPort])
 
-  const dataLayer = {
+  const tempLayer = {
     id: 'data',
     type: 'fill',
     paint: {
@@ -71,6 +74,34 @@ const MapView = ({ polygons }) => {
       'fill-opacity': 0.5,
     }
   }
+
+  const windSpeedLayer = {
+    id: 'data',
+    type: 'fill',
+    paint: {
+      'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'windspeed'],
+        0,
+        '#44cdfc',
+        10,
+        '#000c7a'
+      ],
+      'fill-opacity': 0.3,
+    }
+  }
+  const [useGradientPic, setGradientPic] = useState(tempGradient);
+  const [useLayer, setLayer] = useState(tempLayer);
+  const setWindspeedLayer = () => {setLayer(windSpeedLayer)};
+  const setTemperatureLayer = () => {setLayer(tempLayer)};
+  const setTempGradient = () => {setGradientPic(tempGradient)};
+  const setWindGradient = () => {setGradientPic(windGradient)};
+
+
+  const buttonStyle = {width:40,height:40,borderRadius:10,fontSize:20}
+  const buttonDiv = { position:"absolute",display: "flex", flexDirection:"column",right:0,top:"20%"}
+  const displayGradient = {position: "absolute",display:"flex", bottom:20,right:0}
 
   const handleGeocoderViewportChange = viewport => {
     const geocoderDefaultOverrides = { transitionDuration: 1000 };
@@ -121,7 +152,7 @@ const MapView = ({ polygons }) => {
       {
         polygons && (
           <Source type="geojson" data={polygons}>
-            <Layer {...dataLayer} />
+            <Layer {...useLayer } />
           </Source>
           
         )
@@ -140,6 +171,28 @@ const MapView = ({ polygons }) => {
           position='top-left'
         />
       </div>
+      <div style={buttonDiv}>
+        <button style={buttonStyle} onClick={setTemperatureLayer} onClickCapture={setTempGradient}>🌞</button>
+        <button style={buttonStyle} onClick={setWindspeedLayer} onClickCapture={setWindGradient}>💨</button>
+      </div>
+      <div style={displayGradient}>
+        <img width="50px" height="338px" src={useGradientPic} alt="Gradient"/>
+      </div>
+
+      {/*<div style={buttonDiv}>
+      <svg width="50" height="200">
+        <defs>
+          <linearGradient  id="sampleGradient" x2="0%" y2="100%" >
+            <stop offset="0%" stopColor={useColorOne}  />
+            <stop offset="100%" stopColor={useColorTwo} />
+          </linearGradient>
+        </defs>
+        <g>
+          <rect x="100" y="100" width="50" height="200"
+                fill="url(#sampleGradient)" />
+        </g>
+      </svg>
+      </div>*/}
     </MapGL>
   )
 }
