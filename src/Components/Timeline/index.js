@@ -5,7 +5,7 @@ import _ from 'underscore'
 import moment, { updateLocale } from 'moment'
 import { updateExpression } from '@babel/types';
 
-const Timeline = ({dataItems, start, end, refTimes, updateRefTime, referenceTime}) => {
+const Timeline = ({dataItems, start, end, refTimes, updateRefTime, currentRef}) => {
   // var formatTime = d3.timeFormat();
   // add items to timeline
   const items = [];
@@ -130,7 +130,7 @@ const Timeline = ({dataItems, start, end, refTimes, updateRefTime, referenceTime
     .attr("width", function (d) { return (x(d.end) - x(d.start)); })
     .attr("height", 10)
     .style('fill', (d,i) => d.refTime ? "#18515E": "#b1a7b6")
-    .style('opacity', (d,i) => d.refTime === referenceTime ? 1.0 : 0.5)
+    .style('opacity', (d,i) => d.refTime == currentRef ? 1.0 : 0.5)
     .attr("class", d => d.refTime ? "active": "disabled")
     .on("click", function click(d){       
       if(!selected){
