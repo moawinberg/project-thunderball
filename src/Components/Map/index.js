@@ -23,7 +23,7 @@ const MapView = ({ polygons, DropDown }) => {
     // just for prototyping purposes, change initial coords later
     latitude: 59.33258,
     longitude: 18.0649,
-    zoom: 5,
+    zoom: 7,
     bearing: 0,
     pitch: 0
   });
@@ -143,14 +143,14 @@ const MapView = ({ polygons, DropDown }) => {
   return (
     <MapGL
       {...viewPort}
-      width="100wv"
+      width="99vw"
       height="85vh"
       onViewportChange={setBounds}
       mapboxApiAccessToken={tokens["mapbox"]}
       onHover={onHover}
       interactiveLayerIds={['data']}
       ref={mapRef}
-      minZoom="5">
+      minZoom={5}>
       {
         polygons && (
           <Source type="geojson" data={polygons}>

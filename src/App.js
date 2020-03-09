@@ -103,7 +103,7 @@ function App() {
       {
         polygons && validTimes ? (
           <div>
-            <Timeline dataItems={dataItems} start={REFERENCE_TIME} end={END_TIME} refTimes={forecastTimes} updateRefTime={setReferenceTime}/>
+            <Timeline dataItems={dataItems} start={REFERENCE_TIME} end={END_TIME} refTimes={forecastTimes} updateRefTime={setReferenceTime} currentRef={referenceTime}/>
             <MapView polygons={polygons} DropDown={createDropdown(validTimes)} />
           </div>
         ) :

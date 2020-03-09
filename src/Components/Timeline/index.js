@@ -5,7 +5,7 @@ import _ from 'underscore'
 import moment, { updateLocale } from 'moment'
 import { updateExpression } from '@babel/types';
 
-const Timeline = ({dataItems, start, end, refTimes, updateRefTime}) => {
+const Timeline = ({dataItems, start, end, refTimes, updateRefTime, referenceTime}) => {
   // var formatTime = d3.timeFormat();
   // add items to timeline
   const items = [];
@@ -129,16 +129,18 @@ const Timeline = ({dataItems, start, end, refTimes, updateRefTime}) => {
     .attr("y", function (d) { return y2(d.lane + .5) - 5; })
     .attr("width", function (d) { return (x(d.end) - x(d.start)); })
     .attr("height", 10)
-    .style('fill', d => d.refTime ? "#18515E": "#707070")
+    .style('fill', (d,i) => d.refTime ? "#18515E": "#b1a7b6")
+    .style('opacity', (d,i) => d.refTime === referenceTime ? 1.0 : 0.5)
+    .attr("class", d => d.refTime ? "active": "disabled")
     .on("click", function click(d){       
       if(!selected){
         selected = this;
-        d3.select(selected).style('fill', '#b1a7b6');
+        d3.select(selected).style('fill', '#18515E').style("opacity", 1.0);
      } 
      else {
-        d3.select(selected).style('fill', '#18515E');
+        d3.selectAll(".miniItem0").style("opacity", 0.5);
         selected = this;
-        d3.select(selected).style('fill', '#b1a7b6');
+        d3.select(selected).style('fill', '#18515E').style("opacity", 1.0);
      }
      //console.log(d)
      updateRefTime(d.refTime)

@@ -18,9 +18,10 @@
 .svg-container {
   display: inline-block;
   position: relative;
-  width: 100%;
-  height: 80px;
+  width: 100vw;
+  height: 10vh;
   vertical-align: top;
+  margin-bottom: 1vh;
 }
 .svg-content {
   display: inline-block;
