@@ -82,8 +82,6 @@ const Timeline = ({dataItems, start, end, refTimes, updateRefTime}) => {
     .range([0, miniHeight]);
 
 
-
-
   svgElement = d3.select("div#container")
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
@@ -135,19 +133,19 @@ const Timeline = ({dataItems, start, end, refTimes, updateRefTime}) => {
     .on("click", function click(d){       
       if(!selected){
         selected = this;
-        d3.select(selected).style('fill', '#FFF');
+        d3.select(selected).style('fill', '#b1a7b6');
      } 
      else {
         d3.select(selected).style('fill', '#18515E');
         selected = this;
-        d3.select(selected).style('fill', '#FFF');
+        d3.select(selected).style('fill', '#b1a7b6');
      }
-     console.log(d)
+     //console.log(d)
      updateRefTime(d.refTime)
    });
 
 
- 
+
 
   mini.append("g")
     .attr("class", "x axis")
