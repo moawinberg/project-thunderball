@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import * as d3 from "d3";
 import styles from './timeline.css'
 import _ from 'underscore'
-import moment from 'moment'
+import moment, { updateLocale } from 'moment'
+import { updateExpression } from '@babel/types';
 
 const Timeline = ({dataItems, start, end, refTimes}) => {
   // var formatTime = d3.timeFormat();
@@ -35,8 +36,6 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
 
   var lanes = ["Model runs"];
 
-  
-
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -49,8 +48,7 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
     .scale(scale)
     .tickFormat(d3.timeFormat("%H:%M"));
 
-  //var timeBegin = 0;
-  //var timeEnd = 10;
+
   var maxExtent;
   var minExtent;
   const ref = useRef()
@@ -114,6 +112,8 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
 
   var itemRects = mini.append("g")
     .attr("clip-path", "url(#clip)");
+  
+  var selected;
 
   //mini item rects
   mini.append("g").selectAll("miniItems")
@@ -124,7 +124,19 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
     .attr("y", function (d) { return y2(d.lane + .5) - 5; })
     .attr("width", function (d) { return (x(d.end) - x(d.start)); })
     .attr("height", 10)
-    .style('fill', d => d.refTime ? "#18515E": "#707070");
+    .style('fill', d => d.refTime ? "#18515E": "#707070")
+    .on("click", function click(){       
+      if(!selected){
+        selected = this;
+        d3.select(selected).style('fill', '#8ba8ae');
+     } 
+     else {
+        d3.select(selected).style('fill', '#18515E');
+        selected = this;
+        d3.select(selected).style('fill', '#8ba8ae');
+     }
+   });
+
 
   //mini labels
   /*mini.append("g").selectAll(".miniLabels")
@@ -146,6 +158,7 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
     .attr("height", miniHeight - 1);
 
   display();
+
 
   function display() {
     var rects, labels,

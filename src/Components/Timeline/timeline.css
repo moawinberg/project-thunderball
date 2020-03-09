@@ -4,7 +4,6 @@
 }
 
 .miniItem0 {
-  
   stroke-width: 6;
 }
 
@@ -28,4 +27,8 @@
   position: absolute;
   top: 0;
   left: 0;
+}
+
+rect{
+  fill: yellow;
 }
