@@ -5,7 +5,7 @@ import _ from 'underscore'
 import moment, { updateLocale } from 'moment'
 import { updateExpression } from '@babel/types';
 
-const Timeline = ({dataItems, start, end, refTimes}) => {
+const Timeline = ({dataItems, start, end, refTimes, updateRefTime}) => {
   // var formatTime = d3.timeFormat();
   // add items to timeline
   const items = [];
@@ -132,16 +132,18 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
     .attr("width", function (d) { return (x(d.end) - x(d.start)); })
     .attr("height", 10)
     .style('fill', d => d.refTime ? "#18515E": "#707070")
-    .on("click", function click(){       
+    .on("click", function click(d){       
       if(!selected){
         selected = this;
-        d3.select(selected).style('fill', '#8ba8ae');
+        d3.select(selected).style('fill', '#FFF');
      } 
      else {
         d3.select(selected).style('fill', '#18515E');
         selected = this;
-        d3.select(selected).style('fill', '#8ba8ae');
+        d3.select(selected).style('fill', '#FFF');
      }
+     console.log(d)
+     updateRefTime(d.refTime)
    });
 
 

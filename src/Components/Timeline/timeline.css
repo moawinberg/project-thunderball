@@ -32,3 +32,8 @@
 rect{
   fill: yellow;
 }
+
+.selected {
+  outline-color: yellow;
+}
+

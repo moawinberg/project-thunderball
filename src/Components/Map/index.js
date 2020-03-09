@@ -176,6 +176,7 @@ const MapView = ({ polygons, DropDown }) => {
       <div style={buttonDiv}>
         <button style={buttonStyle} onClick={setTemperatureLayer} onClickCapture={setTempGradient}>🌞</button>
         <button style={buttonStyle} onClick={setWindspeedLayer} onClickCapture={setWindGradient}>💨</button>
+
       </div>
       <div style={displayGradient}>
         <img width="50px" height="338px" src={useGradientPic} alt="Gradient" />
