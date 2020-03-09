@@ -144,7 +144,7 @@ const MapView = ({ polygons, DropDown }) => {
     <MapGL
       {...viewPort}
       width="100wv"
-      height="100vh"
+      height="85vh"
       onViewportChange={setBounds}
       mapboxApiAccessToken={tokens["mapbox"]}
       onHover={onHover}
@@ -179,6 +179,7 @@ const MapView = ({ polygons, DropDown }) => {
       <div style={buttonDiv}>
         <button style={buttonStyle} onClick={setTemperatureLayer} onClickCapture={setTempGradient}>🌞</button>
         <button style={buttonStyle} onClick={setWindspeedLayer} onClickCapture={setWindGradient}>💨</button>
+
       </div>
       <div style={displayGradient}>
         <img width="50px" height="338px" src={useGradientPic} alt="Gradient" />
