@@ -23,7 +23,7 @@ const MapView = ({ polygons, DropDown }) => {
     // just for prototyping purposes, change initial coords later
     latitude: 59.33258,
     longitude: 18.0649,
-    zoom: 7,
+    zoom: 6,
     bearing: 0,
     pitch: 0
   });

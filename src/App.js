@@ -83,7 +83,7 @@ function App() {
   }, [referenceTime])
 
   const createTime = hrs => {
-    const d = new Date(Date.parse(REFERENCE_TIME))
+    const d = new Date(Date.parse(referenceTime))
     //console.log(d.getHours)
     d.setHours(d.getHours() + hrs)
     //console.log(d)
