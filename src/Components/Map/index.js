@@ -149,7 +149,8 @@ const MapView = ({ polygons, DropDown }) => {
       mapboxApiAccessToken={tokens["mapbox"]}
       onHover={onHover}
       interactiveLayerIds={['data']}
-      ref={mapRef}>
+      ref={mapRef}
+      minZoom="5">
       {
         polygons && (
           <Source type="geojson" data={polygons}>
