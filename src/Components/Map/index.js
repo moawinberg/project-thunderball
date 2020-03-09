@@ -142,7 +142,7 @@ const MapView = ({ polygons, DropDown }) => {
     <MapGL
       {...viewPort}
       width="100wv"
-      height="100vh"
+      height="85vh"
       onViewportChange={setBounds}
       mapboxApiAccessToken={tokens["mapbox"]}
       onHover={onHover}
