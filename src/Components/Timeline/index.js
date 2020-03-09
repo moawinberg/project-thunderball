@@ -36,6 +36,10 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
 
   var lanes = ["Model runs"];
 
+  //remove old charts
+  d3.selectAll(".chart").remove();
+  
+
   var margin = { top: 250, right: 40, bottom: 250, left: 40 },
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -77,10 +81,13 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
     .domain([0, 1])
     .range([0, miniHeight]);
 
+
+
+
   svgElement = d3.select("div#container")
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 1200 1200")
+    .attr("viewBox", "0 0 1200 300")
     .classed("svg-content", true)
     .attr("class", "chart");
 
@@ -138,14 +145,7 @@ const Timeline = ({dataItems, start, end, refTimes}) => {
    });
 
 
-  //mini labels
-  /*mini.append("g").selectAll(".miniLabels")
-    .data(items)
-    .enter().append("text")
-    .text(function (d) { return d.id; })
-    .attr("x", function (d) { return x(d.start); })
-    .attr("y", function (d) { return y2(d.lane + .5); })
-    .attr("dy", ".5ex");*/
+ 
 
   mini.append("g")
     .attr("class", "x axis")
