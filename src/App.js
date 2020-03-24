@@ -11,8 +11,8 @@ import Timeline from './Components/Timeline'
 // import * as qs from 'querystring'
 
 const BASE_URL = "https://api.greenlytics.io/weather/v1";
-const REFERENCE_TIME = '2020-03-06T00:00:00.000000000';
-const END_TIME = '2020-03-07T00:00:00.000000000';
+const REFERENCE_TIME = '2020-03-15T00:00:00.000000000';
+const END_TIME = '2020-03-16T00:00:00.000000000';
 const bounds = { ne: { lon: 37, lat: 70 }, sw: { lon: 2, lat: 52 } }
 
 const coords = { lon: range(bounds.sw.lon, bounds.ne.lon, 0.5), lat: range(bounds.sw.lat, bounds.ne.lat, 0.5) }
@@ -30,9 +30,9 @@ function App() {
     const endpoint_url = "/get_nwp?query_params="
     const params = {
       'model': 'DWD_ICON-EU',
-      'start_date': '2020-03-06 00',
-      'end_date': '2020-03-07 00',
-      'freq': '3H',
+      'start_date': '2020-03-15 00',
+      'end_date': '2020-03-16 00',
+      'freq': '6H',
       'coords': { 'latitude': coords.lat, 'longitude': coords.lon, 'height': [60] },
       'variables': ['T', 'U', 'V']
     }

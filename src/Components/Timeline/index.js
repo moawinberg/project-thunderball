@@ -24,7 +24,7 @@ const Timeline = ({dataItems, start, end, refTimes, updateRefTime, currentRef}) 
       refTime: refTimes[index]
     });
     index += 1;
-    d.setHours(d.getHours() + 3)
+    d.setHours(d.getHours() + 6)
   };
   console.log(items)
   // const latestEndTime = _.max(items, i => moment.utc(i.end)).end;

@@ -39,7 +39,6 @@ const useFetch = () => {
             const parsed  = await parseJson(checked);
             setStatusCode(res.status);
             setData(parsed);
-            setData(parsed);
         } catch(e) {
             setError(e);
         } finally {
